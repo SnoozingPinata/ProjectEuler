@@ -8,51 +8,51 @@ def gen_triangular_number():
         triangle_num += counter
         yield triangle_num
 
-def gen_primes():
-    prime_list = [2]
-    number = 1
-    while True:
-        is_prime = True
-        number += 2
-        for prime in prime_list:
-            if number % prime == 0:
-                is_prime = False
-                break
-        if is_prime:
-            prime_list.append(number)
-            yield number
+# this isn't actually used, but I needed it to test the get_factor_count function
+def get_factors(number):
+    if number == 1:
+        return ([1], 1)
+    factors = [1, number]
+    lower_bound = 2
+    upper_bound = number
+    count = 2
+    while lower_bound < upper_bound:
+        if number % lower_bound == 0:
+            factors.append(lower_bound)
+            upper_bound = int(number / lower_bound)
+            factors.append(upper_bound)
+            count +=2
+        lower_bound += 1
+    return (factors, count)
+
+# This is the same function as above, but it doesn't keep track of the factors, just the count.
+# Just an optimization of the above for this specific problem. 
+# Key part is to lower the upper bound for every factor you find.
+def get_factor_count(number):
+    lower_bound = 2
+    upper_bound = number
+    count = 2
+    while lower_bound < upper_bound:
+        if number % lower_bound == 0:
+            upper_bound = int(number / lower_bound)
+            count +=2
+        lower_bound += 1
+    return count
+
 
 gen = gen_triangular_number()
 next(gen)
+highest_count = 0
+max_factor_count = 500
 
-prime_gen = gen_primes()
-
-
-divisors_over = 5
-num_dict = {1: [1]}
 while True:
     triangle_num = next(gen)
-    factors_list = []
-    prime_list = [2]
-    factors_list.append(triangle_num)
-    while triangle_num > prime_list[-1]:
-        prime_list.append(next(prime_gen))
-    for key in num_dict.keys():
-        if triangle_num % key == 0:
-            for factor in num_dict[key]:
-                if not factor in factors_list:
-                    factors_list.append(factor)
-    for prime in prime_list:
-        if triangle_num % prime == 0:
-            if not prime in factors_list:
-                factors_list.append(prime)
-    if len(factors_list) > divisors_over:
-        print("Num: " + str(triangle_num))
-        print("factors: ")
-        print(factors_list)
-        print("Answer is: " + str(triangle_num))
+    count = get_factor_count(triangle_num)
+    if count > highest_count:
+        # This is just so you can see the progress. The entire if statement is unnecessary. 
+        print(f"New Highest Count: {count}. ({triangle_num})")
+        highest_count = count
+    if count > max_factor_count:
         break
-    print("Num: " + str(triangle_num))
-    print("factors: ")
-    print(factors_list)
-    num_dict.update({triangle_num: factors_list})
+
+print("Answer is : " + str(triangle_num))
