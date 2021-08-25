@@ -16,6 +16,7 @@ def is_palindrome(test_string):
     else:
         return is_palindrome(test_string[1:-1])
 
+
 def gen_palindrome_number_lower_than(upper_bound):
     """
     Find the next number that is a palindrome that is less than or equal to upper_bound.
@@ -27,6 +28,7 @@ def gen_palindrome_number_lower_than(upper_bound):
         if is_palindrome(upper_bound):
             yield upper_bound
         upper_bound -= 1
+
 
 def find_largest_palindrome_product(digit_count):
     """
@@ -45,6 +47,7 @@ def find_largest_palindrome_product(digit_count):
             factors_in_range = palindrome_number / num < largest_number_in_digit_count_limit
             if palindrome_is_product_of_iterator and factors_in_range:
                 return palindrome_number
+
 
 if __name__ == "__main__":
     print(f"Answer to Project Euler problem #4 is: {find_largest_palindrome_product(3)}")

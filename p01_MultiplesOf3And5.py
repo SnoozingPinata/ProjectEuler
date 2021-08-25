@@ -18,7 +18,6 @@ def sum_of_multiples_below(upper_bound, multiples):
         counter += 1
     return running_total
 
+
 if __name__ == "__main__":
-    upper_bound = 1000
-    multiples_list = [3, 5]
-    print(f"Answer to Project Euler problem #4 is: {sum_of_multiples_below(upper_bound, multiples_list)}")
+    print(f"Answer to Project Euler problem #4 is: {sum_of_multiples_below(1000, [3, 5])}")
