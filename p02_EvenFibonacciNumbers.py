@@ -35,4 +35,4 @@ def sum_of_even_fibonnaci_numbers_below(upper_bound):
 
 
 if __name__ == "__main__":
-    print(f"Answer to Project Euler problem #4 is: {sum_of_even_fibonnaci_numbers_below(4000000)}")
+    print(f"Answer to Project Euler problem #2 is: {sum_of_even_fibonnaci_numbers_below(4000000)}")

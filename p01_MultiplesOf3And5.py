@@ -20,4 +20,4 @@ def sum_of_multiples_below(upper_bound, multiples):
 
 
 if __name__ == "__main__":
-    print(f"Answer to Project Euler problem #4 is: {sum_of_multiples_below(1000, [3, 5])}")
+    print(f"Answer to Project Euler problem #1 is: {sum_of_multiples_below(1000, [3, 5])}")

@@ -88,7 +88,6 @@ class GridPoint:
             self.higheset_product = self.product_diag_down_left
 
 def test_code(adjacent_number_count):
-    # Testing
     my_grid_point = GridPoint(0, 0)
     my_grid_point.calculate_products(adjacent_number_count)
     if my_grid_point.product_down != 1651104:
