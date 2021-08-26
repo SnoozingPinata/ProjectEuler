@@ -35,6 +35,8 @@ def find_smallest_multiple(divisor_list):
     divisor_list: A list of divisors sorted from lowest to highest.
     """
     increment_value = find_increment_value(divisor_list)
+    # It's possible to do some logic to find an optimal starting point, 
+    # but it would only save a few simple divisibility tests so it's easier to just start at the increment value.
     number = increment_value
     while True:
         if is_multiple_of_all_list_members(number, divisor_list):

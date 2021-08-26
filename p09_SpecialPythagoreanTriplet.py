@@ -1,5 +1,12 @@
 
 
+def order_pythag_triplet(value1, value2, value3):
+    """Return an ordered tuple of the given 3 values."""
+    values = [value1, value2, value3]
+    values.sort()
+    return (values[0], values[1], values[2])
+    
+
 # Squares the current number, adds the current number to a number list, and the square to a squared list.
 # Indices of each list correspond to each other meaning lookups are possible in either direction.
 # For each new number, squares it and subtracts each number in the square list. 
@@ -12,20 +19,16 @@ def gen_pythag_triplet():
     while True:
         current_num = num_list[-1] + 1
         current_square = current_num ** 2
+
         for squared_num in squared_list:
             difference = current_square - squared_num
             if difference in squared_list:
-                if difference < squared_num:
-                    a = num_list[squared_list.index(difference)]
-                    b = num_list[squared_list.index(squared_num)]
-                elif squared_num < difference:
-                    b = num_list[squared_list.index(difference)]
-                    a = num_list[squared_list.index(squared_num)]
-                c = current_num
-                yield (a, b, c)
+                a = num_list[squared_list.index(difference)]
+                b = num_list[squared_list.index(squared_num)]
+                yield order_pythag_triplet(a, b, current_num)
+
         num_list.append(current_num)
         squared_list.append(current_square)
-
 
 
 def find_pythag_triplet_product_with_sum(sum):
@@ -43,6 +46,7 @@ def find_pythag_triplet_product_with_sum(sum):
             ans *= n
         if total == sum:
             return ans
-    
+
+
 if __name__ == "__main__":
     print(f"Answer to Project Euler problem #9 is: {find_pythag_triplet_product_with_sum(1000)}")
