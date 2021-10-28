@@ -27,16 +27,16 @@ class ProblemGrid:
         self.y_size = len(self.grid)
         self.x_size = len(self.grid[0])
 
-    def is_valid_point(self, x, y):
+    def is_valid_point(self, grid_point):
         """Return a boolean value indicating if the point is inside of the grid bounds"""
-        if 0 <= x < self.x_size and 0 <= y < self.y_size:
+        if 0 <= grid_point.x < self.x_size and 0 <= grid_point.y < self.y_size:
             return True
         else:
             return False
     
-    def lookup(self, x, y):
+    def lookup(self, grid_point):
         """Return the value for the point in the grid corresponding to the given x and y values."""
-        return self.grid[y][x]
+        return self.grid[grid_point.y][grid_point.x]
 
     def get_y_size(self):
         return self.y_size
@@ -45,36 +45,40 @@ class ProblemGrid:
         return self.x_size
 
 
+class GridPoint:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
 class GridPointEvaluator:
     def __init__(self, adjacent_number_count, problem_grid):
         self.adjacent_number_count = adjacent_number_count
         self.problem_grid = problem_grid
+        self.directions_to_check = ["right", "down", "down_right", "down_left"]
 
-    def get_adjacent_address(self, x, y, adjustment, right=False, down=False, left=False):
-        if right:
-            x += adjustment
-        if down:
-            y += adjustment
-        if left:
-            x -= adjustment
-        return (x, y)
+    def get_adjacent_grid_point(self, grid_point, direction):
+        adjustment_dict = {
+            'right': GridPoint(grid_point.x + 1, grid_point.y),
+            'down': GridPoint(grid_point.x, grid_point.y + 1),
+            'down_right': GridPoint(grid_point.x + 1, grid_point.y + 1),
+            'down_left': GridPoint(grid_point.x - 1, grid_point.y + 1)
+        }
+        return adjustment_dict[direction]
 
-    def calculate_product_in_direction(self, x, y, right=False, down=False, left=False):
-        if not self.problem_grid.is_valid_point(x, y):
-            return 0
-        running_product = self.problem_grid.lookup(x, y)
-        for num in range(1, self.adjacent_number_count, +1):
-            current_x, current_y = self.get_adjacent_address(x, y, num, right=right, down=down, left=left)
-            if self.problem_grid.is_valid_point(current_x, current_y):
-                running_product *= self.problem_grid.lookup(current_x, current_y)
+    def calculate_product_in_direction(self, grid_point, direction):
+        assert self.problem_grid.is_valid_point(grid_point)
+        running_product = self.problem_grid.lookup(grid_point)
+        for i in range(1, self.adjacent_number_count):
+            current_grid_point = self.get_adjacent_grid_point(grid_point, direction)
+            if self.problem_grid.is_valid_point(current_grid_point):
+                running_product *= self.problem_grid.lookup(current_grid_point)
         return running_product
         
-    def get_highest_product(self, x, y):
+    def get_highest_product(self, grid_point):
         product_list = []
-        product_list.append(self.calculate_product_in_direction(x, y, right=True))
-        product_list.append(self.calculate_product_in_direction(x, y, down=True))
-        product_list.append(self.calculate_product_in_direction(x, y, down=True, right=True))
-        product_list.append(self.calculate_product_in_direction(x, y, down=True, left=True))
+        for direction in self.directions_to_check:
+            product_list.append(self.calculate_product_in_direction(grid_point, direction))
         return max(product_list)
 
 
@@ -88,7 +92,8 @@ class GridEvaluator:
     def solve(self):
         for y in range(0, self.problem_grid.get_y_size()):
             for x in range(0, self.problem_grid.get_x_size()):
-                grid_point_highest_value = self.grid_point_evaluator.get_highest_product(x, y)
+                current_point = GridPoint(x, y)
+                grid_point_highest_value = self.grid_point_evaluator.get_highest_product(current_point)
                 if grid_point_highest_value > self.current_highest_product:
                     self.current_highest_product = grid_point_highest_value
         self.solved = True
