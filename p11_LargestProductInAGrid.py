@@ -1,5 +1,11 @@
 
 
+class GridPoint:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
 class ProblemGrid:
     def __init__(self):
         self.grid = [
@@ -45,12 +51,6 @@ class ProblemGrid:
         return self.x_size
 
 
-class GridPoint:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-
 class GridPointEvaluator:
     def __init__(self, adjacent_number_count, problem_grid):
         self.adjacent_number_count = adjacent_number_count
@@ -70,9 +70,9 @@ class GridPointEvaluator:
         assert self.problem_grid.is_valid_point(grid_point)
         running_product = self.problem_grid.lookup(grid_point)
         for i in range(1, self.adjacent_number_count):
-            current_grid_point = self.get_adjacent_grid_point(grid_point, direction)
-            if self.problem_grid.is_valid_point(current_grid_point):
-                running_product *= self.problem_grid.lookup(current_grid_point)
+            grid_point = self.get_adjacent_grid_point(grid_point, direction)
+            if self.problem_grid.is_valid_point(grid_point):
+                running_product *= self.problem_grid.lookup(grid_point)
         return running_product
         
     def get_highest_product(self, grid_point):
