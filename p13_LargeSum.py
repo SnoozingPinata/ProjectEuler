@@ -100,16 +100,17 @@ num_block = "\
 20849603980134001723930671666823555245252804609722\
 53503534226472524250874054075591789781264330331690"
 
-running_sum = 0
-current_index = 0
-current_num_list = []
 
-for val in num_block:
-    current_num_list.append(val)
-    if (current_index + 1) % 50 == 0:
-        current_number = ''.join(current_num_list)
-        current_num_list = []
-        running_sum += int(current_number)
-    current_index += 1
+if __name__ == "__main__":
+    running_sum = 0
+    current_index = 0
+    current_num_list = []
 
-print("Answer is: " + str(running_sum)[:10])
+    for val in num_block:
+        current_num_list.append(val)
+        if (current_index + 1) % 50 == 0:
+            current_number = ''.join(current_num_list)
+            current_num_list = []
+            running_sum += int(current_number)
+        current_index += 1
+    print(f"Answer to Project Euler problem #12 is: {str(running_sum)[:10]}")
