@@ -1,91 +1,75 @@
 
 
-ones_place_number_to_len_dict = {
-    0: 0, #Not counted**
-    1: 3, #one
-    2: 3, #two
-    3: 5, #three
-    4: 4, #four
-    5: 4, #five
-    6: 3, #six
-    7: 5, #seven
-    8: 5, #eight
-    9: 4 #nine
+num_len_dict = {
+    0: 0,
+    1: len("one"),
+    2: len("two"),
+    3: len("three"),
+    4: len("four"),
+    5: len("five"),
+    6: len("six"),
+    7: len("seven"),
+    8: len("eight"),
+    9: len("nine")
 }
 
 tens_place_number_to_len_dict = {
-    0: 0, #Not counted**
-    1: 4, #teen
-    2: 6, #twenty
-    3: 6, #thirty
-    4: 6, #fourty
-    5: 5, #fifty
-    6: 5, #sixty
-    7: 7, #seventy
-    8: 6, #eighty
-    9: 6 #ninety
+    0: 0,
+    2: len("twenty"),
+    3: len("thirty"),
+    4: len("forty"),
+    5: len("fifty"),
+    6: len("sixty"),
+    7: len("seventy"),
+    8: len("eighty"),
+    9: len("ninety")
 }
 
-special_nums_number_to_len_dict = {
-    10: 3, #ten
-    11: 6, #eleven
-    12: 6, #twelve
-    13: 8, #thirteen
-    15: 7 #fifteen
+teens_num_len_dict = {
+    0: len("ten"),
+    1: len("eleven"),
+    2: len("twelve"),
+    3: len("thirteen"),
+    4: len("fourteen"),
+    5: len("fifteen"),
+    6: len("sixteen"),
+    7: len("seventeen"),
+    8: len("eighteen"),
+    9: len("nineteen")
 }
-
-def is_thousand(num):
-    if num > 999:
-        return True
-    else:
-        return False
-
-def is_hundred(num):
-    if num > 99:
-        return True
-    else:
-        return False
-
-def is_ten(num):
-    if num > 9:
-        return True
-    else:
-        return False
-
-def is_special_case(num):
-    special_case_list = [10, 11, 12, 13, 15]
-    string_of_num = str(num)
-    num_last_two_digits = string_of_num[-2] + string_of_num[-1]
-    if int(num_last_two_digits) in special_case_list:
-        return True
-    else:
-        return False
 
 def get_num_character_count(num):
-    current_num_letter_count = 0
-    current_num_string = str(num)
-    if is_thousand(num):
-        current_num_letter_count += 8 #thousand
-        current_num_letter_count += ones_place_number_to_len_dict[int(current_num_string[-4])]
-    if is_hundred(num):
-        current_num_letter_count += 7 #hundred
-        current_num_letter_count += ones_place_number_to_len_dict[int(current_num_string[-3])]
-    if is_ten(num):
-        if is_special_case(num):
-            last_two_digits_string = current_num_string[-2] + current_num_string[-1]
-            current_num_letter_count += special_nums_number_to_len_dict[int(last_two_digits_string)]
-        else:
-            current_num_letter_count += tens_place_number_to_len_dict[int(current_num_string[-2])]
-            current_num_letter_count += ones_place_number_to_len_dict[int(current_num_string[-1])]
+    count = 0
+
+    ones_place = num % 10
+    tens_place = (num // 10) % 10
+    hundreds_place = (num // 100) % 10
+    thousands_place = (num // 1000) % 10
+
+    if thousands_place > 0:
+        count += len("thousand")
+        count += num_len_dict[thousands_place]
+
+    if hundreds_place > 0:
+        count += len("hundred")
+        count += num_len_dict[hundreds_place]
+
+    if tens_place == 1:
+        count += teens_num_len_dict[ones_place]
     else:
-        current_num_letter_count += ones_place_number_to_len_dict[int(current_num_string[-1])]
-    return current_num_letter_count
+        count += tens_place_number_to_len_dict[tens_place]
+        count += num_len_dict[ones_place]
+
+    # accounting for "and"
+    if (tens_place or ones_place) and (hundreds_place or thousands_place):
+        count += len("and")
+
+    return count
 
 def get_ans(inclusive_top_end):
     assert inclusive_top_end <= 9998
-    max_number = inclusive_top_end + 1
     character_count = 0
-    for num in range(1, max_number):
+    for num in range(1, inclusive_top_end + 1):
         character_count += get_num_character_count(num)
     return character_count
 
