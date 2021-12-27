@@ -1,4 +1,6 @@
 
+### I cannot figure this one out wihtout just looking it up! Moving on for now!
+
 
 def get_ans(positions):
     entangled_relationships_count = positions // 2
