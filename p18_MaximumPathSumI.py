@@ -17,6 +17,12 @@ def get_ans(problem_triangle):
         simplify_triangle(problem_triangle)
     return problem_triangle[0][0]
 
+def get_ans_recursive(problem_triangle):
+    if len(problem_triangle) == 1:
+        return problem_triangle[0][0]
+    else:
+        return get_ans_recursive(simplify_triangle(problem_triangle))
+
 
 if __name__ == "__main__":
     problem_triangle = [
